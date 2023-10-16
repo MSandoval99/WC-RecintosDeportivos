@@ -1,19 +1,24 @@
-// Importa todo el módulo bcryptjs
 import bcrypt from 'bcryptjs';
+import { AppError } from './error.handle.js';
 
-// Desestructura las funciones que necesitas
 const { hash, compare } = bcrypt;
 
-// El resto del código permanece igual
 const encrypt = async (pass) => {
-    const passwordHash = await hash(pass, 8);
-    return passwordHash;
+    try {
+        const passwordHash = await hash(pass, 8);
+        return passwordHash;
+    } catch (error) {
+        throw new AppError('Error encrypting password', 500);
+    }
 }
 
 const verified = async (pass, passHash) => {
-    const isCorrect = await compare(pass, passHash);
-    return isCorrect;
+    try {
+        const isCorrect = await compare(pass, passHash);
+        return isCorrect;
+    } catch (error) {
+        throw new AppError('Error verifying password', 500);
+    }
 }
 
 export { encrypt, verified };
-

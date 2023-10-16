@@ -1,29 +1,49 @@
 import { registerNewUser, loginUser } from '../services/auth.services.js';
+import { BadRequestError } from '../utils/error.handle.js';
+import { validationResult } from 'express-validator';
 
-const registerCtrl = async (req, res) => {
+const registerCtrl = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(new BadRequestError(errors.array().map(error => error.msg).join(', ')));
+    }
+
     try {
         const responseUser = await registerNewUser(req.body);
-        if (responseUser.error) {
-            return res.status(400).json({ message: responseUser.message });
-        }
-        res.status(201).json(responseUser);
+        res.status(201).json({
+            status: 'success',
+            message: 'Usuario registrado exitosamente',
+            data: responseUser
+        });
     } catch (error) {
-        res.status(500).json({ message: 'Error interno del servidor.' });
+        next(error);
     }
-}
+};
 
-const loginCtrl = async (req, res) => {
+const loginCtrl = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(new BadRequestError(errors.array().map(error => error.msg).join(', ')));
+    }
+
     try {
-        const { email, password } = req.body;
-        const responseUser = await loginUser({ email, password });
-
-        if (responseUser === 'PASSWORD_INCORRECT' || responseUser === 'USER_NOT_FOUND') {
-            return res.status(403).json({ message: 'Correo o contraseña incorrectos.' });
+        const { Correo, Contrasenna } = req.body;
+        const responseUser = await loginUser({ Correo, Contrasenna });
+        
+        if (responseUser.error) {
+            throw new BadRequestError('Credenciales incorrectas.');
         }
 
-        res.json(responseUser);
+        // Filtra la contraseña del usuario antes de enviarla
+        const userWithoutPassword = { ...responseUser.user };
+        delete userWithoutPassword.Contrasenna;
+
+        res.json({
+            token: responseUser.token,
+            user: userWithoutPassword
+        });
     } catch (error) {
-        res.status(500).json({ message: 'Error interno del servidor.' });
+        next(error);
     }
 }
 

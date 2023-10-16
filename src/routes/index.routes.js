@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { readdirSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { AppError } from '../utils/error.handle.js';
 
 // Recreando la funcionalidad de __dirname para módulos ES
 const __filename = fileURLToPath(import.meta.url);
@@ -13,7 +14,7 @@ const PATH_ROUTER = `${__dirname}`;
 const router = Router();
 
 /**
- * Limpia el nombre del archivo, elimando la extensión ".routes.js"
+ * Limpia el nombre del archivo, eliminando la extensión ".routes.js"
  * @param {string} fileName - Nombre del archivo a limpiar
  * @returns {string} Nombre del archivo sin extensión
  */
@@ -31,13 +32,13 @@ const loadRoutesFromFile = async (file) => {
             console.log(`Se estan cargando las rutas... /${cleanName}`);
             router.use(`/${cleanName}`, module.default);
         } catch (error) {
-            console.error(`Error al cargar rutas de ${cleanName}:`, error);
+            throw new AppError(`Error al cargar rutas de ${cleanName}: ${error.message}`, 500);
         }
     }
 };
 
 /**
- * Lee dinamicamente los archivos de rutas en el directorio "src/routes"
+ * Lee dinámicamente los archivos de rutas en el directorio "src/routes"
  * y registra las rutas en el router.
  */
 const loadRoutes = () => {

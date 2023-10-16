@@ -1,5 +1,5 @@
 // checkJwt
-import { verifyToken } from '../path_to_jwt.handle.js';
+import { verifyToken } from '../utils/jwt.handle.js';
 
 export const checkJwt = (req, res, next) => {
   try {

@@ -1,10 +1,12 @@
-import { Router } from 'express'; // Importando el enrutador de Express
+import { Router } from 'express';
 import { loginCtrl, registerCtrl } from '../controllers/auth.controller.js';
+import { registerValidation, loginValidation } from '../middleware/userValidation.js';
+import { logMiddleware } from '../middleware/log.middleware.js';
 
-const router = Router(); // Creando el enrutador
+const router = Router();
 
-// Ruta para registrar un nuevo usuario
-router.post('/register', registerCtrl);
-router.post('/login', loginCtrl);
+router.post('/register', registerValidation, registerCtrl);
+
+router.post('/login', loginValidation, logMiddleware,loginCtrl);
 
 export default router;
