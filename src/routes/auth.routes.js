@@ -5,8 +5,8 @@ import { logMiddleware } from '../middleware/log.middleware.js';
 
 const router = Router();
 
-router.post('/register', registerValidation, registerCtrl);
+router.post('/register', logMiddleware, registerValidation, registerCtrl);
 
-router.post('/login', loginValidation, logMiddleware,loginCtrl);
+router.post('/login', logMiddleware, loginValidation, loginCtrl);
 
 export default router;
