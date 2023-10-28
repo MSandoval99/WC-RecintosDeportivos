@@ -1,10 +1,12 @@
+import dotenv from 'dotenv';
+dotenv.config();
 // Importaciones de módulos necesarios
 import express from 'express';
 import { pool } from './config/db.js';
 import morgan from 'morgan';
 import routes from './routes/index.routes.js';
 import cors from 'cors';
-import { errorHandler } from './utils/error.handle.js';
+import { errorHandler, AppError } from './utils/error.handle.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,8 +23,13 @@ const initializeDatabaseConnection = async() => {
         console.log('Conexion exitosa a la base de datos');
         connection.release();
     } catch (error) {
-        console.error('Error al conectar a la base de datos:', error);
-        throw error;
+        if (process.env.NODE_ENV === 'production') {
+            console.error('Error al conectar a la base de datos');
+            throw new AppError('Error de servidor', 500);
+        } else {
+            console.error('Error al conectar a la base de datos:', error);
+            throw error;
+        }
     }
 };
 
