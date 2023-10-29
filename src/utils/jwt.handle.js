@@ -1,9 +1,12 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import jwt from 'jsonwebtoken';
 import { AppError } from './error.handle.js';
 
 const { sign, verify } = jwt;
 
-const JWT_SECRET = process.env.JWT_SECRET || 'marcopolo12';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const generateToken = (id) => {
   try {
