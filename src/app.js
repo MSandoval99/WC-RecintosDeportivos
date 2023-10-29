@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(morgan('dev'));
 app.use(cors({
-    origin: ['https://recintosdeportivos-production.up.railway.app', 'http://localhost:3000']
+    origin: '*'
 }));
 app.use(express.json());
 app.use('/api', routes);
