@@ -1,4 +1,14 @@
 import { body } from 'express-validator';
+import { validationResult } from 'express-validator';
+import { BadRequestError } from '../utils/error.handle.js';
+
+export const validateRequest = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(new BadRequestError(errors.array()[0].msg));
+    }
+    next();
+};
 
 // Validation for user registration
 export const registerValidation = [
@@ -66,4 +76,3 @@ export const loginValidation = [
         .isLength({ min: 8 })
         .withMessage('La contraseña debe tener al menos 8 caracteres.')
 ];
-

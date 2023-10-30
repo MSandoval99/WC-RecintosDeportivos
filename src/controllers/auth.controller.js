@@ -1,50 +1,54 @@
 import { registerNewUser, loginUser } from '../services/auth.services.js';
-import { BadRequestError } from '../utils/error.handle.js';
-import { validationResult } from 'express-validator';
 
+/**
+ * Controlador para registrar un nuevo usuario.
+ * @param {Object} req - Objeto de solicitud de Express.
+ * @param {Object} res - Objeto de respuesta de Express.
+ * @param {function} next - Función next de Express para pasar al siguiente middleware.
+ * @returns {Promise<void>} - Nada.
+ */
 const registerCtrl = async (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return next(new BadRequestError(errors.array().map(error => error.msg).join(', ')));
-    }
-
     try {
         const responseUser = await registerNewUser(req.body);
+
+        // Filtrando la información sensible (si existe)
+        const { Contrasenna, ...userWithoutSensitiveInfo } = responseUser;
+
         res.status(201).json({
             status: 'success',
             message: 'Usuario registrado exitosamente',
-            data: responseUser
+            data: userWithoutSensitiveInfo
         });
     } catch (error) {
         next(error);
     }
 };
 
+/**
+ * Controlador para iniciar sesión de un usuario.
+ * @param {Object} req - Objeto de solicitud de Express.
+ * @param {Object} res - Objeto de respuesta de Express.
+ * @param {function} next - Función next de Express para pasar al siguiente middleware.
+ * @returns {Promise<void>} - Nada.
+ */
 const loginCtrl = async (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return next(new BadRequestError(errors.array().map(error => error.msg).join(', ')));
-    }
-
     try {
         const { Correo, Contrasenna } = req.body;
         const responseUser = await loginUser({ Correo, Contrasenna });
         
-        if (responseUser.error) {
-            throw new BadRequestError('Credenciales incorrectas.');
-        }
-
-        // Filtra la contraseña del usuario antes de enviarla
+        // Filtrando la información sensible
         const userWithoutPassword = { ...responseUser.user };
         delete userWithoutPassword.Contrasenna;
 
         res.json({
+            status: 'success',
+            message: 'Inicio de sesión exitoso',
             token: responseUser.token,
-            user: userWithoutPassword
+            data: userWithoutPassword
         });
     } catch (error) {
         next(error);
     }
-}
+};
 
 export { loginCtrl, registerCtrl };

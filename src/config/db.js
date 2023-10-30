@@ -4,6 +4,10 @@ dotenv.config();
 import { createPool } from 'mysql2/promise';
 import { AppError } from '../utils/error.handle.js';
 
+/**
+ * Configuración de la base de datos a partir de las variables de entorno.
+ * @type {Object}
+ */
 const dbConfig = {
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -15,9 +19,17 @@ const dbConfig = {
     queueLimit: 0
 };
 
+/**
+ * Pool de conexiones a la base de datos utilizando mysql2/promise.
+ * @type {import('mysql2/promise').Pool}
+ */
 const pool = createPool(dbConfig);
 
-// Función para testear la conexión a la base de datos
+/**
+ * Función para testear y establecer la conexión a la base de datos.
+ * Si hay un error durante la conexión, se manejará y se mostrará un mensaje correspondiente.
+ * En un entorno de producción, los detalles del error se ocultan por razones de seguridad.
+ */
 pool.getConnection((err, connection) => {
     if (err) {
         let errorMsg = 'Error en la conexión a la base de datos';
@@ -43,6 +55,7 @@ pool.getConnection((err, connection) => {
         throw new AppError(errorMsg, 500);
     }
 
+    // Si la conexión es exitosa, se libera de inmediato para ser reutilizada por el pool.
     if (connection) connection.release();
     return;
 });

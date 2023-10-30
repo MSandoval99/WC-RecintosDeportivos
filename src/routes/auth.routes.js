@@ -1,12 +1,39 @@
 import { Router } from 'express';
+
+// Importación de controladores
 import { loginCtrl, registerCtrl } from '../controllers/auth.controller.js';
-import { registerValidation, loginValidation } from '../middleware/userValidation.js';
+
+// Importación de middlewares
+import { 
+    registerValidation, 
+    loginValidation, 
+    validateRequest 
+} from '../middleware/userValidation.middleware.js';
 import { logMiddleware } from '../middleware/log.middleware.js';
 
 const router = Router();
 
-router.post('/register', logMiddleware, registerValidation, registerCtrl);
+/**
+ * Ruta para registrar un nuevo usuario.
+ * @name /register
+ * @method POST
+ * @middleware logMiddleware - Registra la solicitud en el log.
+ * @middleware registerValidation - Valida los datos de entrada del registro.
+ * @middleware validateRequest - Verifica si hay errores en la validación.
+ * @function registerCtrl - Controlador para registrar al usuario.
+ */
+router.post('/register', logMiddleware, registerValidation, validateRequest, registerCtrl);
 
-router.post('/login', logMiddleware, loginValidation, loginCtrl);
+/**
+ * Ruta para iniciar sesión de un usuario.
+ * @name /login
+ * @method POST
+ * @middleware logMiddleware - Registra la solicitud en el log.
+ * @middleware loginValidation - Valida los datos de entrada del inicio de sesión.
+ * @middleware validateRequest - Verifica si hay errores en la validación.
+ * @function loginCtrl - Controlador para iniciar sesión del usuario.
+ */
+router.post('/login', logMiddleware, loginValidation, validateRequest, loginCtrl);
 
 export default router;
+

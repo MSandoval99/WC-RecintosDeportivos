@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
+
 // Importaciones de módulos necesarios
 import express from 'express';
 import { pool } from './config/db.js';
@@ -11,16 +12,36 @@ import { errorHandler, AppError } from './utils/error.handle.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+/**
+ * Middleware Configuration
+ */
+// Logging de solicitudes HTTP
 app.use(morgan('dev'));
+
+/**
+ * Configuración de CORS para controlar los dominios permitidos
+ */
 app.use(cors({
-    origin: 'http://localhost:3000', // o cualquier otro origen que desees permitir
+    origin: 'http://localhost:3000',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// Middleware para analizar solicitudes con payloads JSON
 app.use(express.json());
+
+// Montaje de las rutas API
 app.use('/api', routes);
+
+// Middleware para manejo de errores
 app.use(errorHandler);
 
+/**
+ * Función para inicializar conexión con la base de datos.
+ * @async
+ * @throws {AppError} Lanza un error si no puede conectarse a la base de datos en producción.
+ * @throws {Error} Lanza un error si no puede conectarse a la base de datos en desarrollo.
+ */
 const initializeDatabaseConnection = async() => {
     try {
         const connection = await pool.getConnection();
@@ -37,17 +58,24 @@ const initializeDatabaseConnection = async() => {
     }
 };
 
+/**
+ * Función para iniciar el servidor.
+ */
 const startServer = () => {
     app.listen(PORT, () => {
         console.log(`Servidor corriendo en puerto ${PORT}`);
     });
 };
 
+/**
+ * Función anónima autoejecutable para iniciar la aplicación.
+ * @async
+ */
 (async () => {
     try {
         await initializeDatabaseConnection();
         startServer();
     } catch (error) {
-        console.error('Error al iniciar la aplicacion:', error);
-    };
+        console.error('Error al iniciar la aplicación:', error);
+    }
 })();
