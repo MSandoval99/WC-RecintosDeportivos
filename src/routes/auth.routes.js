@@ -42,7 +42,7 @@ router.post('/login', logMiddleware, loginValidation, validateRequest, loginCtrl
  * @middleware checkJwt - Verifica el token JWT y añade el ID del usuario a req.userId.
  * @function getUserDataCtrl - Controlador para obtener datos del usuario.
  */
-router.get('/me', logMiddleware, checkJwt, getUserDataCtrl);
+router.post('/me', logMiddleware, checkJwt, getUserDataCtrl);
 
 export default router;
 
