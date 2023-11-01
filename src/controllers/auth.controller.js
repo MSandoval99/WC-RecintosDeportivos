@@ -61,6 +61,7 @@ const loginCtrl = async (req, res, next) => {
 const getUserDataCtrl = async (req, res, next) => {
     try {
         const userEmail = req.body.Correo;
+        console.log(userEmail);
         const userData = await getUserDataByEmail(userEmail);
 
         // Filtrando la información sensible
