@@ -1,4 +1,4 @@
-import { registerNewUser, loginUser } from '../services/auth.services.js';
+import { registerNewUser, loginUser, getUserDataByEmail} from '../services/auth.services.js';
 
 /**
  * Controlador para registrar un nuevo usuario.
@@ -51,4 +51,29 @@ const loginCtrl = async (req, res, next) => {
     }
 };
 
-export { loginCtrl, registerCtrl };
+/**
+ * Controlador para obtener datos del usuario autenticado.
+ * @param {Object} req - Objeto de solicitud de Express.
+ * @param {Object} res - Objeto de respuesta de Express.
+ * @param {function} next - Función next de Express para pasar al siguiente middleware.
+ * @returns {Promise<void>} - Nada.
+ */
+const getUserDataCtrl = async (req, res, next) => {
+    try {
+        const userEmail = req.body.Correo;
+        const userData = await getUserDataByEmail(userEmail);
+
+        // Filtrando la información sensible
+        const userWithoutPassword = { ...userData };
+        delete userWithoutPassword.Contrasenna;
+
+        res.json({
+            status: 'success',
+            data: userWithoutPassword
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export { loginCtrl, registerCtrl, getUserDataCtrl };

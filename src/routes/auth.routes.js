@@ -1,7 +1,7 @@
 import { Router } from 'express';
-
+import { checkJwt } from '../middleware/check.middleware.js';
 // Importación de controladores
-import { loginCtrl, registerCtrl } from '../controllers/auth.controller.js';
+import { loginCtrl, registerCtrl, getUserDataCtrl } from '../controllers/auth.controller.js';
 
 // Importación de middlewares
 import { 
@@ -34,6 +34,15 @@ router.post('/register', logMiddleware, registerValidation, validateRequest, reg
  * @function loginCtrl - Controlador para iniciar sesión del usuario.
  */
 router.post('/login', logMiddleware, loginValidation, validateRequest, loginCtrl);
+
+/**
+ * Ruta para obtener datos del usuario autenticado.
+ * @name /me
+ * @method GET
+ * @middleware checkJwt - Verifica el token JWT y añade el ID del usuario a req.userId.
+ * @function getUserDataCtrl - Controlador para obtener datos del usuario.
+ */
+router.get('/me', logMiddleware, checkJwt, getUserDataCtrl);
 
 export default router;
 
