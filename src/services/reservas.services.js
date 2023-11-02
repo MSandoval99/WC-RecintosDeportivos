@@ -3,7 +3,7 @@ import { InternalServerError } from '../utils/error.handle.js';
 
 export const getAllReservations = async () => {
     try {
-        const query = 'SELECT * FROM Reserva WHERE Semana_id_semana = 3';
+        const query = 'SELECT * FROM Reserva WHERE Semana_id_semana = 44';
         const [reservas] = await pool.query(query);
         return reservas;
     } catch (error) {
