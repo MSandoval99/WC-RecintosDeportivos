@@ -10,3 +10,19 @@ export const getAllReservations = async () => {
         throw new InternalServerError('Error al obtener reservas de la semana 3.');
     }
 };
+
+export const addSemana = async ({ fecha_inicio, fecha_fin, mes, annio }) => {
+    try {
+        const query = 'INSERT INTO Semana (fecha_inicio, fecha_fin, mes, annio) VALUES (?, ?, ?, ?)';
+        const [result] = await pool.query(query, [fecha_inicio, fecha_fin, mes, annio]);
+        return {
+            id: result.insertId,
+            fecha_inicio,
+            fecha_fin,
+            mes,
+            annio
+        };
+    } catch (error) {
+        throw new InternalServerError('Error al agregar semana.');
+    }
+};

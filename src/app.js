@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 3000;
  * Middleware Configuration
  */
 // Logging de solicitudes HTTP
-app.use(morgan('dev'));
+app.use(morgan('combined'));
 
 /**
  * Configuración de CORS para controlar los dominios permitidos

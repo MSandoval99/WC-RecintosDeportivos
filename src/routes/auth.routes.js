@@ -38,7 +38,7 @@ router.post('/login', logMiddleware, loginValidation, validateRequest, loginCtrl
 /**
  * Ruta para obtener datos del usuario autenticado.
  * @name /me
- * @method GET
+ * @method POST
  * @middleware checkJwt - Verifica el token JWT y añade el ID del usuario a req.userId.
  * @function getUserDataCtrl - Controlador para obtener datos del usuario.
  */
