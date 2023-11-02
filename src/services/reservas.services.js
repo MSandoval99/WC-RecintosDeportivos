@@ -26,3 +26,21 @@ export const addSemana = async ({ fecha_inicio, fecha_fin, mes, annio }) => {
         throw new InternalServerError('Error al agregar semana.');
     }
 };
+
+export const addReserva = async ({ Usuarios_ID_usuario, Semana_id_semana, Recinto_id_recinto, Bloque_horario_id, actividad, carrera }) => {
+    try {
+        const query = 'INSERT INTO Reserva (Usuarios_ID_usuario, Semana_id_semana, Recinto_id_recinto, Bloque_horario_id_bloque, actividad, carrera) VALUES (?, ?, ?, ?, ?, ?)';
+        const [result] = await pool.query(query, [Usuarios_ID_usuario, Semana_id_semana, Recinto_id_recinto, Bloque_horario_id, actividad, carrera]);
+        return {
+            id: result.insertId,
+            Usuarios_ID_usuario,
+            Semana_id_semana,
+            Recinto_id_recinto,
+            Bloque_horario_id,
+            actividad,
+            carrera
+        };
+    } catch (error) {
+        throw new InternalServerError('Error al agregar reserva.');
+    }
+}

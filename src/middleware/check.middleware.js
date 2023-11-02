@@ -3,8 +3,7 @@ import { UnauthorizedError } from '../utils/error.handle.js';
 
 export const checkJwt = (req, res, next) => {
     const authHeader = req.headers.authorization;
-    console.log("Received Authorization Header:", authHeader);
-
+    
     if (!authHeader) {
         return next(new UnauthorizedError('Authentication required'));
     }
