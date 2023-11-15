@@ -22,7 +22,7 @@ app.use(morgan('combined'));
  * Configuración de CORS para controlar los dominios permitidos
  */
 app.use(cors({
-    origin: ['http://localhost:3000', 'https://interfazrecintosdeportivos-production.up.railway.app'],
+    origin: ['http://localhost:3000', 'https://interfazrecintosdeportivosv2-production.up.railway.app'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
