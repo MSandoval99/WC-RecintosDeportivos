@@ -26,8 +26,8 @@ export const addSemana_ctrl = async (req, res, next) => {
 
 export const addReservaCtrl = async (req, res, next) => {
     try{
-        const { Usuarios_ID_usuario, Semana_id_semana, Recinto_id_recinto, Bloque_horario_id, actividad, carrera } = req.body;
-        const responseUser = await addReserva({ Usuarios_ID_usuario, Semana_id_semana, Recinto_id_recinto, Bloque_horario_id, actividad, carrera });
+        const { Usuarios_ID_usuario, Semana_id_semana, Recinto_id_recinto, Bloque_horario_id_bloque, actividad, carrera } = req.body;
+        const responseUser = await addReserva({ Usuarios_ID_usuario, Semana_id_semana, Recinto_id_recinto, Bloque_horario_id_bloque, actividad, carrera });
 
         res.json({
             status: 'success',
