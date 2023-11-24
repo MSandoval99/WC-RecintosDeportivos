@@ -59,7 +59,7 @@ export const updateReserva = async (id_reserva, reservationData) => {
     try {
         const reservation = await getReservaById(id_reserva);
         const { actividad, carrera } = reservationData;
-        const query = `UPDATE Reserva SET activadad = ?, carrera = ? WHERE id_reserva = ?`;
+        const query = `UPDATE Reserva SET actividad = ?, carrera = ? WHERE id_reserva = ?`;
         await pool.query(query, [actividad, carrera, id_reserva]);
         return {
             id: id_reserva,
