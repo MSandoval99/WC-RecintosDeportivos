@@ -1,3 +1,3 @@
 # RecintosDeportivos
 ## Branch - WC|Cristian
-Branch enfocada en el trabajo Backend del proyecto.
+Branch enfocada en el trabajo Backend del proyectoo.
